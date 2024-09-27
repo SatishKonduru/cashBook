@@ -5,6 +5,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import { globalProperties } from '../../shared/globalProperties';
+import { UserService } from '../../services/user.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -23,6 +26,9 @@ export class RegisterComponent implements OnInit {
  
   registerForm : any = FormGroup
   formBuilder = inject(FormBuilder)
+  private _userService = inject(UserService)
+  private _toastrService = inject(ToastrService)
+  private _router = inject(Router)
  
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -35,6 +41,16 @@ export class RegisterComponent implements OnInit {
   onRegister(){
     const formData = this.registerForm.value
     console.log("Form Data: ", formData)
+    this._userService.userRegister(formData).subscribe({
+      next: (res: any) => {
+        this._toastrService.success('Registration Successful','Success', globalProperties.toastrConfig)
+        this._router.navigate(['/login'])
+      },
+      error: (err: any) => {
+        this._toastrService.error('Registraion Faild','Fail', globalProperties.toastrConfig)
+        this.registerForm.reset()
+      }
+    })
   }
 
 }
