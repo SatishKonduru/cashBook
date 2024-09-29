@@ -10,7 +10,10 @@
       "id": "4ce0",
       "username": "rsk",
       "email": "rsk@gmail.com",
-      "password": "rsk"
+      "password": "rsk",
+      "books": {
+        "title": "NEWBOOK"
+      }
     }
-  ] 
+  ]
 }

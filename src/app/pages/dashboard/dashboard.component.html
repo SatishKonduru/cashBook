@@ -1,7 +1,9 @@
 <mat-drawer-container class="dashboard-container" autosize>
     <mat-drawer #drawer class="sidnavStyle" mode="side" opened> 
         <div class="text-center p-2">
-            <button mat-flat-button style="background-color: blueviolet; color:#fff">+ Add New Book</button>
+            <button mat-flat-button style="background-color: blueviolet; color:#fff" (click)="addBook()">
+                + Add New Book
+            </button>
             
             <mat-divider style="width: 100%; margin-top: 20px;"></mat-divider>
         </div>
