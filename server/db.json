@@ -11,9 +11,20 @@
       "username": "rsk",
       "email": "rsk@gmail.com",
       "password": "rsk",
-      "books": {
-        "title": "NEWBOOK"
-      }
+      "books": [
+        {
+          "bookTitle": "Daily Transactions"
+        },
+        {
+          "bookTitle": "Arunachalam Trip"
+        },
+        {
+          "bookTitle": "Kids Expends"
+        },
+        {
+          "bookTitle": "Family Expendetures"
+        }
+      ]
     }
   ]
 }
