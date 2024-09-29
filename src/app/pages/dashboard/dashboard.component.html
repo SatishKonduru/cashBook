@@ -1,1 +1,17 @@
-<p>dashboard works!</p>
+<mat-drawer-container class="dashboard-container" autosize>
+    <mat-drawer #drawer class="sidnavStyle" mode="side" opened> 
+        <div class="text-center p-2">
+            <button mat-flat-button style="background-color: blueviolet; color:#fff">+ Add New Book</button>
+            
+            <mat-divider style="width: 100%; margin-top: 20px;"></mat-divider>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div style="margin: 10px;">
+            <button mat-mini-fab style="background-color: blueviolet; color:#fff" (click)="drawer.toggle()">
+                <mat-icon>menu </mat-icon> 
+            </button>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ad, quia. Consequatur, nihil. Rerum ipsam, ex consequatur vel, porro rem a nesciunt qui accusamus fugit veritatis impedit fugiat sequi magni eligendi.
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

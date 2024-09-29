@@ -11,6 +11,19 @@
         <button mat-button style="color: blueviolet"> Contactus</button>
     </span>
     <span class="spacer"></span>
-    <button mat-stroked-button style="color: blueviolet" [routerLink]="'/login'">Login</button>
-    <button mat-stroked-button style="color: blueviolet" [routerLink]="'/register'">Register</button>
+
+    @if(username()){
+        <span style="color: chocolate; cursor: pointer;" [matMenuTriggerFor]="logMenu"> {{username()}}</span>
+    }
+    @else{
+        <button mat-stroked-button style="color: blueviolet" [routerLink]="'/login'">Login</button>
+        <button mat-stroked-button style="color: blueviolet" [routerLink]="'/register'">Register</button>
+    
+    }
+   
+
 </mat-toolbar>
+
+<mat-menu #logMenu="matMenu">
+    <a mat-menu-item (click)="logout()"> Logout</a>
+</mat-menu>
