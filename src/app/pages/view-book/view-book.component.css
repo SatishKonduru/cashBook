@@ -16,3 +16,34 @@
         transform: translateX(15px);
     }
 }
+
+.spacer{
+    flex: 1 1 auto;
+}
+.drawer-container{
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 40%;
+    background: white;
+    box-shadow: 0 2px 5px brown;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+.drawer-container.open{
+    transform: translateX(0)
+}
+.drawer-content{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+::ng-deep .timepicker__header{
+    background-color: brown !important;
+}
+
+::ng-deep .timepicker-button{
+   color: brown !important 
+}
