@@ -29,7 +29,7 @@
                                     <tr>
                                         <td style="color: blueviolet; font-size: large;">{{book.bookTitle}}</td>
                                         <td>
-                                            <button mat-icon-button style="color:blueviolet">
+                                            <button mat-icon-button style="color:blueviolet" (click)="viewBook(book)">
                                                 <mat-icon matTooltip="View">visibility</mat-icon>
                                             </button>
 
@@ -53,6 +53,7 @@
             @else {
                 <h4>No Books were Found!</h4>
             }
+            <router-outlet></router-outlet>
         </div>
     </mat-drawer-content>
 </mat-drawer-container>

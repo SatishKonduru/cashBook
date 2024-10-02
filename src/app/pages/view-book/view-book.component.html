@@ -1,0 +1,47 @@
+
+<div class="container-fluid">
+    <div class="row mt-3">
+        <div class="col text-center">
+            <button mat-mini-fab style="background-color: brown;" (click)="goBack()">
+                <mat-icon style="color: #fff" matTooltip="Back">keyboard_backspace</mat-icon>
+            </button>
+            <span style="font-size: 18px; margin-left: 20px;"> Book: <span class="book-name">{{bookName}}</span>
+            </span>
+        </div>
+       
+
+    
+    <div class="col text-center">
+        <mat-form-field appearance="outline">
+            <mat-label>Serch: </mat-label>
+            <input matInput [(ngModel)]="searchKey">
+            <button mat-icon-button matSuffix><mat-icon>close</mat-icon></button>
+        </mat-form-field>
+    </div>
+    <div class="col text-center">
+        <button mat-flat-button style="background-color: green; color:white" (click)="toggleDrawerForCashIn()"> + Cash In</button>
+        <button mat-flat-button style="background-color: brown; color:white" (click)="toggleDrawerForCashOut()"> - Cash Out</button>
+    </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+<div class="containter mt-3">
+    <div class="row text-center">
+        <div class="col">
+            <mat-icon style="background-color: green; color: #fff ; border-radius: 100px;">add</mat-icon>Cash In
+            <span style="font-size: 24px; color: green">&#8377; 0/-</span>
+        </div>
+
+        <div class="col">
+            <mat-icon style="background-color: brown; color: #fff ; border-radius: 100px;">remove</mat-icon>Cash Out
+            <span style="font-size: 24px; color: brown">&#8377; 0/-</span>
+        </div>
+
+        <div class="col">
+            <mat-icon style="background-color: blue; color: #fff ; border-radius: 100px;">check</mat-icon>Balance Amount
+            <span style="font-size: 24px; color: blue">&#8377; 0/-</span>
+        </div>
+        
+    </div>
+</div>
+<mat-divider></mat-divider>

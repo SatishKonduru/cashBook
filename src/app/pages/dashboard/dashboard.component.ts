@@ -4,7 +4,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { NewBookComponent } from '../new-book/new-book.component';
 import { UserService } from '../../services/user.service';
@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit{
   public dialog = inject(MatDialog) 
   user = inject(UserService)
   books: any = []
+  public router = inject(Router)
   
   ngOnInit(): void {
     this.getBooks()
@@ -70,5 +71,8 @@ export class DashboardComponent implements OnInit{
 
   }
 
-
+  viewBook(book: any){
+    console.log("Selected Book: ", book)
+     this.router.navigate(['/viewBook'], {queryParams: {book: book.bookTitle}})
+  }
 }
