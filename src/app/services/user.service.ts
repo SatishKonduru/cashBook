@@ -5,6 +5,7 @@ import { EncryptionService } from './encryption.service';
 import { P } from '@angular/cdk/keycodes';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Observable, switchMap } from 'rxjs';
 
 
 
@@ -43,6 +44,62 @@ export class UserService {
   getUsers(){
   return  this.http.get<any>(`${this.url}/users`)
   }
+
+ cashInEntry(userId: any, bookName: any, data: any) : Observable<any>{
+  return this.http.get(`${this.url}/users/${userId}`).pipe(
+    switchMap((user: any) => {
+      // find the book and update
+      const updatedBook = user.books.map((book: any) => {
+        if(book.bookTitle == bookName){
+          // add new entry to  book
+          const updatedBook = {
+            ...book,
+            cashInEntries: [...(book.cashInEntries ||  []) , data]
+          }
+          // calculate the cashInTotal
+          const cashInTotal = (updatedBook.cashInEntries || [])
+                          .reduce((sum:number, entry: any) => sum+ parseFloat(entry.amount),0 )
+
+          return {
+            ...updatedBook, 
+            cashInTotal: cashInTotal
+          }
+        }
+        return book
+      })
+
+      // update the user with the modified books
+      return this.http.patch(`${this.url}/users/${userId}`, {books: updatedBook})
+    })
+  )
+ }
+
+ cashOutEntry(userId:any, bookName: any, data: any): Observable<any>{
+  return this.http.get(`${this.url}/users/${userId}`).pipe(
+    switchMap((user: any) => {
+      const updatedBooks = user.books.map((book: any) => {
+        if(book.bookTitle == bookName){
+          const updatedBooks = {
+            ...book,
+            cashOutEntries: [...(book.cashOutEntries || []), data]
+          }
+          const cashOutTotal = (updatedBooks.cashOutEntries || [])
+                                .reduce((sum: number, entry: any) => sum+ parseFloat(entry.amount) , 0)
+          return {
+            ...updatedBooks,
+            cashOutTotal: cashOutTotal
+          }
+        }
+        return book
+      })
+      return this.http.patch(`${this.url}/users/${userId}`, {books: updatedBooks})
+    })
+  )
+ }
+
+
+
+
 
 
 }

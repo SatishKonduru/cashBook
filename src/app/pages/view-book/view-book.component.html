@@ -29,17 +29,31 @@
     <div class="row text-center">
         <div class="col">
             <mat-icon style="background-color: green; color: #fff ; border-radius: 100px;">add</mat-icon>Cash In
-            <span style="font-size: 24px; color: green">&#8377; 0/-</span>
+            <span style="font-size: 24px; color: green">&#8377; 
+
+                {{cashInMoney != null || undefined ? cashInMoney : 0}} /-
+            </span>
         </div>
 
         <div class="col">
             <mat-icon style="background-color: brown; color: #fff ; border-radius: 100px;">remove</mat-icon>Cash Out
-            <span style="font-size: 24px; color: brown">&#8377; 0/-</span>
+            <span style="font-size: 24px; color: brown">&#8377; 
+                {{cashOutMoney != null || undefined? cashOutMoney : 0  }} /-
+            </span>
         </div>
 
         <div class="col">
             <mat-icon style="background-color: blue; color: #fff ; border-radius: 100px;">check</mat-icon>Balance Amount
-            <span style="font-size: 24px; color: blue">&#8377; 0/-</span>
+            @if(cashInMoney-cashOutMoney){
+                <span style="font-size: 24px; color: blue">&#8377; 
+                    {{cashInMoney - cashOutMoney}} /-
+                </span>
+            }
+            @else {
+                <span style="font-size: 24px; color: blue">&#8377; 
+                   0/-
+                </span>
+            }
         </div>
         
     </div>
@@ -119,10 +133,10 @@
                     </mat-form-field>
                 </div>
                 @if(entryCode == 1){
-                    <button mat-flat-button [disabled]="!(addForm.dirty && addForm.valid)">Save </button>
+                    <button mat-flat-button [disabled]="!(addForm.dirty && addForm.valid)" (click)="save()">Save </button>
                 }
                 @else {
-                    <button mat-flat-button [disabled]="!(addForm.dirty && addForm.valid)">Save </button> 
+                    <button mat-flat-button [disabled]="!(addForm.dirty && addForm.valid)" (click)="save()">Save </button> 
                 }
                 
             </from>

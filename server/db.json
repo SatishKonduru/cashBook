@@ -16,7 +16,25 @@
           "bookTitle": "Daily Transactions"
         },
         {
-          "bookTitle": "Arunachalam Trip"
+          "bookTitle": "Arunachalam Trip",
+          "cashInEntries": [
+            {
+              "date": "10/03/2024",
+              "time": "10:09 AM",
+              "amount": "10000",
+              "description": "Initial Money"
+            }
+          ],
+          "cashInTotal": 10000,
+          "cashOutEntries": [
+            {
+              "date": "10/03/2024",
+              "time": "10:09 AM",
+              "amount": "2000",
+              "description": "Bus Fare"
+            }
+          ],
+          "cashOutTotal": 2000
         },
         {
           "bookTitle": "Kids Expends"

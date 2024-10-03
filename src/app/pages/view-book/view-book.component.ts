@@ -13,6 +13,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import { MatCalendar } from '@angular/material/datepicker';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { UserService } from '../../services/user.service';
+import { globalProperties } from '../../shared/globalProperties';
 @Component({
   selector: 'app-view-book',
   standalone: true,
@@ -51,6 +53,8 @@ entryCode = 0
 cashInMoney : number
 cashOutMoney : number
 datePipe = inject(DatePipe)
+userService = inject(UserService)
+
 
 constructor(){
   this.activatedRoute.queryParams.subscribe(p => this.bookName = p['book'])
@@ -65,6 +69,8 @@ ngOnInit(): void {
     amount: [0, Validators.required],
     description: ['', Validators.required]
   })
+
+  this.getTotals()
 }
 goBack(){
 this.router.navigate(['/dashboard'])
@@ -85,6 +91,83 @@ toggleDrawerForCashOut(){
 
 toggleDrawer(){
   this.isDrawerOpen = !this.isDrawerOpen
+  this.resetForm()
 }
+
+async save(){
+  const formData = this.addForm.value
+  const transactionDate = this.datePipe.transform(formData.date, 'MM/dd/YYYY')
+  const data = {
+    date: transactionDate,
+    time: formData.time,
+    amount: formData.amount,
+    description: formData.description
+  }
+  let userDetails = this.userService.retrieveCredentials()
+  await this.userService.getUsers().subscribe({
+    next: (res: any) => {
+      res.find(obj => {
+        if(obj.username == userDetails.username && obj.password == userDetails.password){
+          this.userId = obj.id
+        }
+      })
+      if(this.entryCode == 1){
+        this.userService.cashInEntry(this.userId, this.bookName, data).subscribe({
+          next: (res: any) => {
+            this.toastr.success('Entry added successfully.','Success', globalProperties.toastrConfig)
+            this.getTotals()
+            this.resetForm()
+            this.toggleDrawer()
+          }
+        })
+      }
+      if(this.entryCode == 2){
+        this.userService.cashOutEntry(this.userId, this.bookName, data).subscribe({
+          next: (res: any) => {
+            this.toastr.success('Entry added successfully.','Success', globalProperties.toastrConfig)
+            this.getTotals()
+            this.resetForm()
+            this.toggleDrawer()
+          }
+        })
+      }
+    },
+    error: () => {
+      this.toastr.error('No Entry was Added.', 'Fail', globalProperties.toastrConfig)
+    }
+
+  })
+}
+
+
+resetForm(){
+  const initailTime = new Date().toLocaleTimeString('en-us', {hour: '2-digit', minute:'2-digit', hour12:true})
+  this.addForm.setValue({
+    date: new Date(),
+    time: initailTime,
+    amount: 0,
+    description: ''
+  })
+}
+
+getTotals(){
+  let userDetails = this.userService.retrieveCredentials()
+  this.userService.getUsers().subscribe({
+    next: (res: any) => {
+      res.find(obj => {
+        if(obj.username == userDetails.username && obj.password == userDetails.password){
+          obj.books.forEach( (obj:any) => {
+            if(obj.bookTitle == this.bookName){
+              this.cashInMoney = obj.cashInTotal
+              this.cashOutMoney = obj.cashOutTotal
+            }
+          })
+        }
+      })
+    }
+  })
+}
+
+
 
 }
