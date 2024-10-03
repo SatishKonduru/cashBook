@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
@@ -15,6 +15,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { UserService } from '../../services/user.service';
 import { globalProperties } from '../../shared/globalProperties';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-book',
   standalone: true,
@@ -31,14 +34,16 @@ import { globalProperties } from '../../shared/globalProperties';
               ReactiveFormsModule,
               MatCalendar,
               MatDatepickerModule,
-              NgxMaterialTimepickerModule
+              NgxMaterialTimepickerModule,
+              MatTableModule,
+              MatPaginatorModule
             ],
   templateUrl: './view-book.component.html',
   styleUrl: './view-book.component.css',
   preserveWhitespaces: true,
   providers: [DatePipe]
 })
-export class ViewBookComponent implements OnInit{
+export class ViewBookComponent implements OnInit, AfterViewInit{
 activatedRoute = inject(ActivatedRoute)
 bookName: any = ''
 searchKey : any = ''
@@ -54,8 +59,10 @@ cashInMoney : number
 cashOutMoney : number
 datePipe = inject(DatePipe)
 userService = inject(UserService)
+entries : any
+displayedColumns : string [] = ['date', 'time', 'description', 'amount', 'actions']
 
-
+@ViewChild(MatPaginator) paginator : MatPaginator
 constructor(){
   this.activatedRoute.queryParams.subscribe(p => this.bookName = p['book'])
   
@@ -118,6 +125,7 @@ async save(){
             this.getTotals()
             this.resetForm()
             this.toggleDrawer()
+            this.getEntriesTable()
           }
         })
       }
@@ -128,6 +136,7 @@ async save(){
             this.getTotals()
             this.resetForm()
             this.toggleDrawer()
+            this.getEntriesTable()
           }
         })
       }
@@ -169,5 +178,42 @@ getTotals(){
 }
 
 
+getEntriesTable(){
+  let userDetails = this.userService.retrieveCredentials()
+  this.userService.getUsers().subscribe({
+    next: (res: any) => {
+      res.find(obj => {
+        if(obj.username == userDetails.username && obj.password == userDetails.password){
+          this.userId = obj.id
+        }
+      })
+      this.userService.entriesTable(this.userId, this.bookName).subscribe({
+        next: (entries: any[]) => {
+          this.entries = new MatTableDataSource(entries)
+          this.entries.paginator = this.paginator
+        } 
+      })
+    }
+
+  })
+}
+
+get hasEntries() : boolean {
+return this.entries?.data.length > 0
+}
+
+ngAfterViewInit(): void {
+  this.getEntriesTable()
+}
+
+
+applyFilter(value: any){
+  this.entries.filter = value.trim().toLowerCase()
+}
+
+onSearchClear(){
+  this.searchKey = ''
+  this.applyFilter('')
+}
 
 }

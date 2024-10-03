@@ -32,9 +32,15 @@
               "time": "10:09 AM",
               "amount": "2000",
               "description": "Bus Fare"
+            },
+            {
+              "date": "10/03/2024",
+              "time": "06:05 PM",
+              "amount": "200",
+              "description": "Tea and Snacks"
             }
           ],
-          "cashOutTotal": 2000
+          "cashOutTotal": 2200
         },
         {
           "bookTitle": "Kids Expends"

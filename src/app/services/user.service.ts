@@ -5,7 +5,7 @@ import { EncryptionService } from './encryption.service';
 import { P } from '@angular/cdk/keycodes';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, switchMap } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 
 
 
@@ -97,9 +97,33 @@ export class UserService {
   )
  }
 
+entriesTable(userId: any, bookName: any){
+  return this.http.get(`${this.url}/users/${userId}`).pipe(
+    map((user: any) => {
+      const book = user.books.find((b: any) => b.bookTitle == bookName)
+      if(book){
+        const cashInEntries = book.cashInEntries || []
+        const cashOutEntries = book.cashOutEntries || []
+        const combinedEntries = [...cashInEntries, ...cashOutEntries]
+        combinedEntries.sort((a: any, b: any) => {
+          const dateTimeA = this.parseDateTime(a.date, a.time);
+          const dateTimeB = this.parseDateTime(b.date, b.time)
+          return dateTimeB.getTime() - dateTimeA.getTime()
+        })
+        //Add a type properties to distinguish entries
+        return combinedEntries.map(entry => ({
+          ...entry,
+          type: cashInEntries.includes(entry)? 'cash-in':'cash-out'
+        }))
+      }
+      return []
+    })
+  )
+}
 
-
-
+parseDateTime(date: string, time: string):Date{
+  return new Date(`${date} ${time}`)
+}
 
 
 }
