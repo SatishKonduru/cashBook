@@ -17,6 +17,8 @@ import { UserService } from '../../services/user.service';
 import { globalProperties } from '../../shared/globalProperties';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { EditTransactionComponent } from '../edit-transaction/edit-transaction.component';
 
 @Component({
   selector: 'app-view-book',
@@ -61,6 +63,7 @@ datePipe = inject(DatePipe)
 userService = inject(UserService)
 entries : any
 displayedColumns : string [] = ['date', 'time', 'description', 'amount', 'actions']
+dialog = inject(MatDialog)
 
 @ViewChild(MatPaginator) paginator : MatPaginator
 constructor(){
@@ -215,5 +218,26 @@ onSearchClear(){
   this.searchKey = ''
   this.applyFilter('')
 }
+
+onEdit(data: any){
+console.log("Selected Transaction Data: ", data)
+
+const dialogConfig = new MatDialogConfig()
+dialogConfig.width = '500px'
+dialogConfig.autoFocus = true
+dialogConfig.disableClose = true
+dialogConfig.data = {
+  data: data,
+  userId: this.userId,
+  bookName: this.bookName
+}
+const dialogRef = this.dialog.open(EditTransactionComponent, dialogConfig)
+
+
+}
+
+
+
+
 
 }
