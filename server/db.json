@@ -29,26 +29,43 @@
           "cashInTotal": 15000,
           "cashOutEntries": [
             {
-              "date": "10/03/2024",
-              "time": "10:09 AM",
+              "date": "10/05/2024",
+              "time": "11:50 AM",
               "amount": "2000",
               "description": "Bus Fare"
-            },
-            {
-              "date": "10/03/2024",
-              "time": "06:05 PM",
-              "amount": "500",
-              "description": "Coffee and Snacks",
-              "cashOutTotal": 2200
             }
           ],
-          "cashOutTotal": 2500
+          "cashOutTotal": 2000
         },
         {
           "bookTitle": "Kids Expends"
         },
         {
-          "bookTitle": "Family Expendetures"
+          "bookTitle": "Family Expendetures",
+          "cashInEntries": [
+            {
+              "date": "10/05/2024",
+              "time": "11:40 AM",
+              "amount": "25000",
+              "description": "Salary"
+            }
+          ],
+          "cashInTotal": 25000,
+          "cashOutEntries": [
+            {
+              "date": "10/05/2024",
+              "time": "11:50 AM",
+              "amount": "5000",
+              "description": "House Rent"
+            },
+            {
+              "date": "10/05/2024",
+              "time": "11:51 AM",
+              "amount": "1500",
+              "description": "Electricity Bill"
+            }
+          ],
+          "cashOutTotal": 6500
         },
         {
           "bookTitle": "NEW BOOK For TEST"

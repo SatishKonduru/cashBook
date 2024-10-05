@@ -242,7 +242,15 @@ dialogRef.componentInstance.emitter.subscribe({
 }
 
 
-
+onDelete(data: any){
+this.userService.deleteEntry(this.userId, this.bookName, data.type, data.date, data.time).subscribe({
+  next: () => {
+    this.toastr.success('Transaction Deleted Successfully', 'Success', globalProperties.toastrConfig)
+    this.getEntriesTable()
+    this.getTotals()
+  }
+})
+}
 
 
 }

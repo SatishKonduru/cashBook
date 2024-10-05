@@ -219,4 +219,49 @@ updateCashOutEntry(userId: any, bookName: any, data: any): Observable<any> {
     })
   );
 }
+
+deleteEntry(userId: any, bookName: any, entryType: string, date: string, time: string): Observable<any>{
+  return this.http.get(`${this.url}/users/${userId}`).pipe(
+    switchMap((user: any) => {
+      // Find the book and delete the matching entry
+      const updatedBook = user.books.map((book: any) => {
+        if(book.bookTitle == bookName){
+          if(entryType == 'cash-in'){
+            // removing the entry from cashInEntries
+            const updatedCashInEntries = (book.cashInEntries || []).filter(
+              (entry: any) => !(entry.date === date && entry.time === time) 
+              )
+              // calcualte the new CashInTotal
+              const cashInTotal = updatedCashInEntries.reduce(
+                (sum: number, entry: any) => sum+parseFloat(entry.amount),0
+              )
+              return {
+                ...book,
+                cashInEntries : updatedCashInEntries,
+                cashInTotal: cashInTotal
+              }
+          }
+          else if(entryType == 'cash-out'){
+            const updateCashOutEntries = (book.cashOutEntries || []).filter((entry: any)=> 
+              !(entry.date === date && entry.time === time))
+            const cashOutTotal = updateCashOutEntries.reduce((sum: number, entry: any) =>sum + parseFloat(entry.amount) , 0)
+            return {
+              ...book,
+              cashOutEntries : updateCashOutEntries,
+              cashOutTotal: cashOutTotal
+            }
+          
+          }
+        }
+        return book
+      })
+      return this.http.patch(`${this.url}/users/${userId}`, {books: updatedBook})
+    })
+  )
+}
+
+
+
+
+
 }
