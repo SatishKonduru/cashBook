@@ -126,4 +126,97 @@ parseDateTime(date: string, time: string):Date{
 }
 
 
+updateCashInEntry(userId: any, bookName: any, data: any): Observable<any> {
+  return this.http.get(`${this.url}/users/${userId}`).pipe(
+    switchMap((user: any) => {
+      // Find the book and update it
+      const updatedBooks = user.books.map((book: any) => {
+        if (book.bookTitle === bookName) {
+          console.log("Data in Service: ", data);
+          
+          const updatedCashInEntries = book.cashInEntries.map((entry: any) => {
+            console.log("Data in Service: ", data);
+            console.log("Actual Data: ", entry);
+            if (
+              entry.date === data.date &&
+              entry.time === data.time
+            ) {
+              console.log("MATCHED");
+              // Update the matched entry
+              const cashInTotal = (book.cashInEntries || []).reduce((sum: number, entry: any) => sum + parseFloat(entry.amount), 0);
+              return { ...entry, ...data , cashInTotal: cashInTotal};
+              
+          
+            }
+            
+            return entry;
+          });
+
+          // Calculate the new cashOutTotal
+          const cashInTotal = updatedCashInEntries.reduce(
+            (sum: number, entry: any) => sum + parseFloat(entry.amount),
+            0
+          );
+
+          return {
+            ...book,
+            cashInEntries: updatedCashInEntries,
+            cashInTotal: cashInTotal, // Update the total
+          };
+        }
+        return book;
+      });
+
+      // Update the user with the modified books
+      return this.http.patch(`${this.url}/users/${userId}`, { books: updatedBooks });
+    })
+  );
+}
+
+updateCashOutEntry(userId: any, bookName: any, data: any): Observable<any> {
+  return this.http.get(`${this.url}/users/${userId}`).pipe(
+    switchMap((user: any) => {
+      // Find the book and update it
+      const updatedBooks = user.books.map((book: any) => {
+        if (book.bookTitle === bookName) {
+          console.log("Data in Service: ", data);
+          
+          const updatedCashOutEntries = book.cashOutEntries.map((entry: any) => {
+            console.log("Data in Service: ", data);
+            console.log("Actual Data: ", entry);
+            if (
+              entry.date === data.date &&
+              entry.time === data.time
+            ) {
+              console.log("MATCHED");
+              // Update the matched entry
+              const cashOutTotal = (book.cashOutEntries || []).reduce((sum: number, entry: any) => sum + parseFloat(entry.amount), 0);
+               return { ...entry, ...data , cashOutTotal: cashOutTotal};
+            
+          
+            }
+            
+            return entry;
+          });
+
+          // Calculate the new cashOutTotal
+          const cashOutTotal = updatedCashOutEntries.reduce(
+            (sum: number, entry: any) => sum + parseFloat(entry.amount),
+            0
+          );
+
+          return {
+            ...book,
+            cashOutEntries: updatedCashOutEntries,
+            cashOutTotal: cashOutTotal, // Update the total
+          };
+        }
+        return book;
+      });
+
+      // Update the user with the modified books
+      return this.http.patch(`${this.url}/users/${userId}`, { books: updatedBooks });
+    })
+  );
+}
 }

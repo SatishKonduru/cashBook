@@ -232,7 +232,12 @@ dialogConfig.data = {
   bookName: this.bookName
 }
 const dialogRef = this.dialog.open(EditTransactionComponent, dialogConfig)
-
+dialogRef.componentInstance.emitter.subscribe({
+  next: () => {
+    this.getEntriesTable()
+    this.getTotals()
+  }
+})
 
 }
 

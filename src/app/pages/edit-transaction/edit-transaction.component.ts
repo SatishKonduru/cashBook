@@ -1,7 +1,7 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, Inject, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, EventEmitter, inject, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
@@ -10,6 +10,9 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatCalendar, MatDatepickerModule} from '@angular/material/datepicker';
+import { UserService } from '../../services/user.service';
+import { ToastrService } from 'ngx-toastr';
+import { globalProperties } from '../../shared/globalProperties';
 
 @Component({
   selector: 'app-edit-transaction',
@@ -28,13 +31,19 @@ import {MatCalendar, MatDatepickerModule} from '@angular/material/datepicker';
           MatCalendar
         ],
   templateUrl: './edit-transaction.component.html',
-  styleUrl: './edit-transaction.component.css'
+  styleUrl: './edit-transaction.component.css',
+  providers: [DatePipe]
 })
 export class EditTransactionComponent implements OnInit{
 
   transactionData : any = {}
   bookName : any
   userId: any
+  datePipe = inject(DatePipe)
+  userService = inject(UserService)
+  toastr = inject(ToastrService)
+  dialogRef = inject(MatDialogRef<EditTransactionComponent>)
+  emitter = new EventEmitter()
   constructor(@Inject(MAT_DIALOG_DATA) public dialogData: any){
     console.log("Dialog Data: ", dialogData)
      this.transactionData = dialogData.data
@@ -67,7 +76,33 @@ export class EditTransactionComponent implements OnInit{
   }
 
   updateTransaction(){
-    
+    const formData = this.editForm.value
+    const newDate = this.datePipe.transform(formData.date, 'MM/dd/YYYY')
+    const data = {
+      date: newDate,
+      time: formData.time,
+      amount: formData.amount,
+      description: formData.description
+    }
+    if(this.transactionData.type == 'cash-in'){
+      this.userService.updateCashInEntry(this.userId, this.bookName, data).subscribe({
+        next: () => {
+          this.toastr.success('Transaction updated Successfully', 'Suucess', globalProperties.toastrConfig)
+          this.dialogRef.close()
+          this.emitter.emit()
+        }
+      })
+    }
+    if(this.transactionData.type == 'cash-out'){
+      this.userService.updateCashOutEntry(this.userId, this.bookName, data).subscribe({
+        next: () => {
+          this.toastr.success('Transaction updated Successfully', 'Suucess', globalProperties.toastrConfig)
+          this.dialogRef.close()
+          this.emitter.emit()
+        }
+      })
+    }
+
   }
 
 }

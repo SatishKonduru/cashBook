@@ -21,11 +21,12 @@
             {
               "date": "10/03/2024",
               "time": "10:09 AM",
-              "amount": "10000",
-              "description": "Initial Money"
+              "amount": "15000",
+              "description": "Updated Initial Money ",
+              "cashInTotal": 10000
             }
           ],
-          "cashInTotal": 10000,
+          "cashInTotal": 15000,
           "cashOutEntries": [
             {
               "date": "10/03/2024",
@@ -36,11 +37,12 @@
             {
               "date": "10/03/2024",
               "time": "06:05 PM",
-              "amount": "200",
-              "description": "Tea and Snacks"
+              "amount": "500",
+              "description": "Coffee and Snacks",
+              "cashOutTotal": 2200
             }
           ],
-          "cashOutTotal": 2200
+          "cashOutTotal": 2500
         },
         {
           "bookTitle": "Kids Expends"
